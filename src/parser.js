@@ -10,9 +10,15 @@ const TTEParser = (function() {
     let _r, _c, cs, rs, r, c;
     let rows = [...table.getElementsByTagName("tr")];
     let widths = table.getAttribute("data-cols-width");
+    let heights = table.getAttribute("data-cols-height");
     if (widths)
       widths = widths.split(",").map(function(item) {
         return parseInt(item);
+      });
+
+    if (heights)
+    	heights = heights.split(",").map(function(item) {
+      	return parseInt(item);
       });
     let merges = [];
     for (_r = 0; _r < rows.length; ++_r) {
@@ -69,7 +75,16 @@ const TTEParser = (function() {
     if (widths)
       widths.forEach((width, _i) => {
         ws.columns[_i].width = width;
+			});
+
+        //Setting row height
+        console.log('heights', heights)
+    if (heights)
+			heights.forEach((height, _i) => {
+        var row = ws.getRow(_i);
+        row.height = height;
       });
+      console.log('ws', ws)
     applyMerges(ws, merges);
     return ws;
   };
