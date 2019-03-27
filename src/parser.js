@@ -84,13 +84,11 @@ const TTEParser = (function () {
             });
 
         //Setting row height
-        console.log('heights', heights)
         if (heights)
             heights.forEach((height, _i) => {
                 var row = ws.getRow(_i);
                 row.height = height;
             });
-        console.log('ws', ws)
         applyMerges(ws, merges);
         return ws;
     };
