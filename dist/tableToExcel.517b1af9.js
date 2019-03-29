@@ -44981,6 +44981,14 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 var TableToExcel = function (Parser) {
   var methods = {};
 
@@ -45002,29 +45010,35 @@ var TableToExcel = function (Parser) {
     });
   };
 
-  methods.tableToSheet = function (wb, table, opts) {
-    var ws = this.initSheet(wb, opts.sheet.name);
-    ws = Parser.parseDomToTable(ws, table, opts);
+  methods.tableToSheet = function (wb, tables, opts) {
+    var _this = this;
+
+    _toConsumableArray(tables).forEach(function (table, index) {
+      var ws = _this.initSheet(wb, opts.sheets[index].name);
+
+      ws = Parser.parseDomToTable(ws, table, opts);
+    });
+
     return wb;
   };
 
-  methods.tableToBook = function (table, opts) {
+  methods.tableToBook = function (tables, opts) {
     var wb = this.initWorkBook();
-    wb = this.tableToSheet(wb, table, opts);
+    wb = this.tableToSheet(wb, tables, opts);
     return wb;
   };
 
-  methods.convert = function (table) {
+  methods.convert = function (tables) {
     var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var defaultOpts = {
       name: "export.xlsx",
       autoStyle: false,
-      sheet: {
+      sheets: [{
         name: "Sheet 1"
-      }
+      }]
     };
     opts = _objectSpread({}, defaultOpts, opts);
-    var wb = this.tableToBook(table, opts);
+    var wb = this.tableToBook(tables, opts);
     this.save(wb, opts.name);
   };
 
@@ -45062,7 +45076,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56505" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52669" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -26,31 +26,33 @@ const TableToExcel = (function (Parser) {
         });
     };
 
-    methods.tableToSheet = function (wb, table, opts) {
-        let ws = this.initSheet(wb, opts.sheet.name);
-        ws = Parser.parseDomToTable(ws, table, opts);
+    methods.tableToSheet = function (wb, tables, opts) {
+        [...tables].forEach((table, index) => {
+            let ws = this.initSheet(wb, opts.sheets[index].name);
+            ws = Parser.parseDomToTable(ws, table, opts);
+        })
         return wb;
     };
 
-    methods.tableToBook = function (table, opts) {
+    methods.tableToBook = function (tables, opts) {
         let wb = this.initWorkBook();
-        wb = this.tableToSheet(wb, table, opts);
+        wb = this.tableToSheet(wb, tables, opts);
         return wb;
     };
 
-    methods.convert = function (table, opts = {}) {
+    methods.convert = function (tables, opts = {}) {
         let defaultOpts = {
             name: "export.xlsx",
             autoStyle: false,
-            sheet: {
+            sheets: [{
                 name: "Sheet 1"
-            }
+            }]
         };
         opts = {
             ...defaultOpts,
             ...opts
         };
-        let wb = this.tableToBook(table, opts);
+        let wb = this.tableToBook(tables, opts);
         this.save(wb, opts.name);
     };
 
